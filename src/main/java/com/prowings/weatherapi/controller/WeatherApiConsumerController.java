@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.prowings.weatherapi.response.dto.model.WeatherDataDTO;
 import com.prowings.weatherapi.response.model.WeatherData;
 import com.prowings.weatherapi.service.WeatherApiService;
 
@@ -22,17 +24,21 @@ public class WeatherApiConsumerController {
 		return "hello!!!";
 	}
 
+//	@GetMapping("/weathers/{city}")
+//	public ResponseEntity<String> getCurrentWeather(@PathVariable String city)
+//	{
+//		WeatherData data = weatherService.getCurrentWeatherData(city);
+//		String weatherDescription = data.getWeather().get(0).getDescription();
+//		double weatherTempinCelcius = kelvinToCelcius(data.getMain().getTemp());
+//		return new ResponseEntity<String>("Todays weather is : "+weatherDescription+" and Temp is :"+weatherTempinCelcius+" Degree Celcius", HttpStatus.OK);
+//	}
+
 	@GetMapping("/weathers/{city}")
-	public ResponseEntity<String> getCurrentWeather(@PathVariable String city)
+	public ResponseEntity<WeatherDataDTO> getCurrentWeather(@PathVariable String city) throws JsonProcessingException
 	{
-		WeatherData data = weatherService.getCurrentWeatherData(city);
-		String weatherDescription = data.getWeather().get(0).getDescription();
-		double weatherTempinCelcius = kelvinToCelcius(data.getMain().getTemp());
-		return new ResponseEntity<String>(weatherDescription+" and Temp is :"+weatherTempinCelcius+" Degree Celcius", HttpStatus.OK);
+		System.out.println("Request received to fetch Weather details of city : "+city);
+		return weatherService.getCurrentWeatherData(city);
 	}
 
-	private double kelvinToCelcius(double tempInKelvin) {
-		return tempInKelvin - 273.15;
-	}
 
 }
